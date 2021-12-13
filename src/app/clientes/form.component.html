@@ -1,0 +1,61 @@
+
+
+<div class="container py-5">
+
+  <div class="card bg-light border-4">
+    <div class="card-header">{{titulo}}</div>
+    <div class="card-body">
+
+      <form> <!-- se llama al metodo create() (se encuentra creado en form.component.ts) cuando se apreta el boton "Crear cliente"-->
+
+        <label for="nombre">Nombre:</label>
+        <div class="form-group row">
+          <div class="col-sm-6" >     <!-- [(ngModel)] sirve para pasar/binding los datos que se insertan en el formulario a los atributos del objeto cliente creada en el form.componment-->
+            <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)">
+          </div>
+        </div>
+
+      <br>
+
+      <label for="apellido">Apellido:</label>
+        <div class="form-group row">
+          <div class="col-sm-6" >
+            <input type="text" class="form-control" [(ngModel)]="cliente.apellido" name="apellido"
+            onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)">
+          </div>
+        </div>
+
+        <br>
+
+        <label for="dni">DNI:</label>
+        <div class="form-group row">
+          <div class="col-sm-6" >
+            <input type="number" class="form-control" [(ngModel)]="cliente.dni" name="dni"
+            oninput="this.value=this.value.slice(0,this.maxLength)" maxlength="8">
+          </div>
+        </div>
+
+        <br>
+
+        <label for="email">Email:</label>
+        <div class="form-group row">
+          <div class="col-sm-6" >
+            <input type="text" class="form-control" [(ngModel)]="cliente.email" name="email">
+          </div>
+        </div>
+
+        <br>
+
+        <div class="form-group row">
+          <div class="col-sm-6" >
+            <button class="btn btn-primary" role="button" (click) = "create()" *ngIf="!cliente.id else elseBlock">Crear cliente</button>
+          <ng-template #elseBlock>
+            <button class="btn btn-primary" role="button" (click) = "update()">Editar cliente</button>
+          </ng-template>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
