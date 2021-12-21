@@ -1,27 +1,43 @@
 
-
 <div class="container py-5">
-
+  <ul class="alert alert-danger" *ngIf="errores!= null && errores!= undefined && errores.length>0">
+    <li *ngFor="let err of errores">
+      {{err}}
+    </li>
+  </ul>
   <div class="card bg-light border-4">
     <div class="card-header">{{titulo}}</div>
     <div class="card-body">
 
-      <form> <!-- se llama al metodo create() (se encuentra creado en form.component.ts) cuando se apreta el boton "Crear cliente"-->
+      <form #clienteForm="ngForm">
 
         <label for="nombre">Nombre:</label>
         <div class="form-group row">
           <div class="col-sm-6" >     <!-- [(ngModel)] sirve para pasar/binding los datos que se insertan en el formulario a los atributos del objeto cliente creada en el form.componment-->
-            <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)">
+            <input #nombre="ngModel" type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre"
+             onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)"> <!--minlength="4" required -->
+          <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+            <div *ngIf="nombre.errors['required']">
+              El nombre es un campo obligatorio
+            </div>
+          <div *ngIf="nombre.errors['minlength']">
+            El nombre debe tener al menos 4 caracteres
+          </div>
           </div>
         </div>
-
+        </div>
       <br>
 
       <label for="apellido">Apellido:</label>
         <div class="form-group row">
           <div class="col-sm-6" >
-            <input type="text" class="form-control" [(ngModel)]="cliente.apellido" name="apellido"
-            onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)">
+            <input #apellido="ngModel" type="text" class="form-control" [(ngModel)]="cliente.apellido" name="apellido"
+            onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" > <!--required -->
+            <div class="alert alert-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
+              <div *ngIf="apellido.errors['required']">
+                El apellido es un campo obligatorio
+              </div>
+            </div>
           </div>
         </div>
 
@@ -31,7 +47,15 @@
         <div class="form-group row">
           <div class="col-sm-6" >
             <input type="number" class="form-control" [(ngModel)]="cliente.dni" name="dni"
-            oninput="this.value=this.value.slice(0,this.maxLength)" maxlength="8">
+            oninput="this.value=this.value.slice(0,this.maxLength)" maxlength="8" #dni="ngModel" > <!--minlength="8" required-->
+            <div class="alert alert-danger" *ngIf="dni.invalid && (dni.dirty || dni.touched)">
+              <div *ngIf="dni.errors['required']">
+                El DNI es un campo obligatorio
+              </div>
+              <div *ngIf="dni.errors['minlength']">
+                Ingrese un dni valido
+              </div>
+            </div>
           </div>
         </div>
 
@@ -40,7 +64,15 @@
         <label for="email">Email:</label>
         <div class="form-group row">
           <div class="col-sm-6" >
-            <input type="text" class="form-control" [(ngModel)]="cliente.email" name="email">
+            <input type="text" class="form-control" [(ngModel)]="cliente.email" name="email" #email="ngModel">
+            <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)"> <!--required email -->
+              <div *ngIf="email.errors['required']">
+                El email es un campo obligatorio
+              </div>
+              <div *ngIf="email.errors['email']">
+                Ingrese un email valido
+              </div>
+            </div>
           </div>
         </div>
 
@@ -48,14 +80,14 @@
 
         <div class="form-group row">
           <div class="col-sm-6" >
-            <button class="btn btn-primary" role="button" (click) = "create()" *ngIf="!cliente.id else elseBlock">Crear cliente</button>
+            <button class="btn btn-primary" role="button" (click) = "create()" *ngIf="!cliente.id else elseBlock" [disabled]="!clienteForm.form.valid">Crear cliente</button>
           <ng-template #elseBlock>
-            <button class="btn btn-primary" role="button" (click) = "update()">Editar cliente</button>
+            <button class="btn btn-primary" role="button" (click) = "update()" [disabled]="!clienteForm.form.valid">Editar cliente</button>
           </ng-template>
           </div>
         </div>
 
-      </form>
+    </form>
     </div>
   </div>
 </div>
